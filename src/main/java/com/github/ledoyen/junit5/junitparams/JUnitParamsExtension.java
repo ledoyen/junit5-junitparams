@@ -34,7 +34,7 @@ import static java.util.Collections.emptyList;
 class JUnitParamsExtension implements TestTemplateInvocationContextProvider, TestExecutionCondition {
 
     private ExecutableInvoker executableInvoker = new ExecutableInvoker();
-    private static Class<?> testTemplateContainerExtensionContextClass = ReflectionUtils.loadClass("org.junit.jupiter.engine.descriptor.TestTemplateContainerExtensionContext").get();
+    private static Class<?> TEMPLATE_CONTEXT_CLASS = ReflectionUtils.loadClass("org.junit.jupiter.engine.descriptor.TestTemplateContainerExtensionContext").get();
 
     @Override
     public boolean supports(ContainerExtensionContext context) {
@@ -49,7 +49,7 @@ class JUnitParamsExtension implements TestTemplateInvocationContextProvider, Tes
                 .map(e -> true)
                 .orElse(false);
 
-        boolean parentContextIsTemplatedOne = testTemplateContainerExtensionContextClass.equals(context.getParent().get().getClass());
+        boolean parentContextIsTemplatedOne = TEMPLATE_CONTEXT_CLASS.equals(context.getParent().get().getClass());
         return (annotatedWithParameters && !parentContextIsTemplatedOne) ? ConditionEvaluationResult.disabled("Both @Parameters and @Test annotations are present") : ConditionEvaluationResult.enabled("");
     }
 
